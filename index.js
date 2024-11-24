@@ -1,5 +1,5 @@
 const Database = require('./database/initDb');
-const ApiController = require('./controller');
+const ApiController = require('./controller/controller');
 const loadCsvToDatabase = require('./database/loadCsv');
 
 
