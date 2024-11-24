@@ -18,15 +18,29 @@ class ProducerService {
           return reject(err);
         }
 
-        // const groupedProducers = rows.map(row => ({
-        //   producer: row.producers,
-        //   moviesCount: row.movies_count,
-        // }));
-
-        resolve(rows);
+        resolve(this.processData(rows));
       });
     });
   }
+
+  async processData(winnersList) {
+    const winners = [];
+    const separators = /\s*(?:and|,)\s*/;
+
+    for (const winner of winnersList) {
+      const producers = winner.producers.split(separators);
+      const year = winner.year;
+
+      for (const producer of producers) {
+        winners.push({ producer: producer.trim(), wins: [year] });
+      }
+    }
+
+    console.log('previa', winners);
+
+    return winnersList;
+  }
 }
+
 
 module.exports = ProducerService;
