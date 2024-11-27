@@ -24,19 +24,46 @@ class ProducerService {
   }
 
   async processData(winnersList) {
-    const winners = [];
-    const separators = /\s*(?:and|,)\s*/;
+    const separators = /(\s*, and\s+)|(\s*,\s*|\s+and\s+)/g;
+    const producerMap = new Map();
 
     for (const winner of winnersList) {
-      const producers = winner.producers.split(separators);
       const year = winner.year;
+      const producers = winner.producers.split(separators).filter(Boolean);
 
       for (const producer of producers) {
-        winners.push({ producer: producer.trim(), wins: [year] });
+        const trimmedProducer = producer.trim();
+
+        if (trimmedProducer !== ',' && trimmedProducer !== 'and' && trimmedProducer !== ', and') {
+          if (!producerMap.has(trimmedProducer)) {
+            producerMap.set(trimmedProducer, []);
+          }
+          producerMap.get(trimmedProducer).push(year);
+        }
       }
     }
 
-    console.log('previa', winners);
+    const intervals = [];
+
+    for (const [producer, years] of producerMap) {
+      if (years.length > 1) {
+        const interval = Math.max(...years) - Math.min(...years);
+        intervals.push({ producer, interval });
+      }
+    }
+
+    const minInterval = Math.min(...intervals.map(entry => entry.interval));
+    const maxInterval = Math.max(...intervals.map(entry => entry.interval));
+
+    const minProducers = intervals.filter(entry => entry.interval === minInterval);
+    const maxProducers = intervals.filter(entry => entry.interval === maxInterval);
+
+    console.log('intervalo minimo', minInterval);
+    console.log('intervalo maximo', maxInterval);
+
+    console.log('producers min', minProducers);
+    console.log('producers max', maxProducers);
+
 
     return winnersList;
   }
