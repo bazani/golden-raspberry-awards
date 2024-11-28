@@ -23,7 +23,7 @@ class ProducerService {
     });
   }
 
-  async processData(winnersList) {
+  processData(winnersList) {
     const separators = /(\s*, and\s+)|(\s*,\s*|\s+and\s+)/g;
     const producerMap = new Map();
 
@@ -43,12 +43,23 @@ class ProducerService {
       }
     }
 
+    return this.groupByInterval(producerMap);
+  }
+
+  groupByInterval(producerMap) {
     const intervals = [];
 
     for (const [producer, years] of producerMap) {
       if (years.length > 1) {
-        const interval = Math.max(...years) - Math.min(...years);
-        intervals.push({ producer, interval });
+        years.sort((a,b) => a - b);
+
+        const interval = years[years.length - 1] - years[0];
+        intervals.push({
+          producer,
+          interval,
+          previousWin: years[0],
+          followingWin: years[years.length - 1],
+        });
       }
     }
 
@@ -58,14 +69,10 @@ class ProducerService {
     const minProducers = intervals.filter(entry => entry.interval === minInterval);
     const maxProducers = intervals.filter(entry => entry.interval === maxInterval);
 
-    console.log('intervalo minimo', minInterval);
-    console.log('intervalo maximo', maxInterval);
-
-    console.log('producers min', minProducers);
-    console.log('producers max', maxProducers);
-
-
-    return winnersList;
+    return {
+      min: minProducers,
+      max: maxProducers,
+    };
   }
 }
 
