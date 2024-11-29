@@ -20,9 +20,17 @@ class ApiController {
     }
 
     start(port) {
-        this.app.listen(port, () => {
+        this.server = this.app.listen(port, () => {
             console.log(`API iniciada e respondendo em http://localhost:${port}`)
         });
+    }
+
+    getServer() {
+        return this.server;
+    }
+
+    getApp() {
+        return this.app;
     }
 }
 
