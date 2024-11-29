@@ -29,8 +29,6 @@ describe('API Integration Tests', () => {
     expect(response.body).toHaveProperty('min');
     expect(response.body).toHaveProperty('max');
 
-    console.log('meh', response.body.min[0]);
-
     expect(response.body.min[0]).toHaveProperty('producer');
     expect(response.body.min[0]).toHaveProperty('interval');
     expect(response.body.min[0]).toHaveProperty('previousWin');
