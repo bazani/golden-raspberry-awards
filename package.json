@@ -1,0 +1,25 @@
+{
+  "name": "outsera",
+  "version": "1.0.0",
+  "description": "API para leitura dos indicados e vencedores do Pior Filme da Golden Raspberry Awards.",
+  "main": "index.js",
+  "scripts": {
+    "start": "index.js",
+    "start:dev": "nodemon index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "author": "Mateus Bazani",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "express": "^4.21.1",
+    "fast-csv": "^5.0.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
+  }
+}
