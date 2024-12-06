@@ -6,6 +6,9 @@ Para executar a aplicação, seguir os seguintes passos:
 - Instalar as dependencias com o comando `npm install`;
 - Executar a aplicação com o comando `npm start`.
 
+# Consultando
+Para obter a lista de vencedores utiliza o seguinte endpoint: [http://localhost:3000/premios](http://localhost:3000/premios).
+
 # Testes
 Para executar o teste de integração, após instalar as dependências, executar o comando `npm test`.
 
