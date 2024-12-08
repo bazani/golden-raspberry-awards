@@ -47,31 +47,54 @@ class ProducerService {
   }
 
   groupByInterval(producerMap) {
-    const intervals = [];
+    const minIntervals= [];
+    const maxIntervals = [];
 
     for (const [producer, years] of producerMap) {
       if (years.length > 1) {
         years.sort((a,b) => a - b);
 
-        const interval = years[years.length - 1] - years[0];
-        intervals.push({
-          producer,
-          interval,
-          previousWin: years[0],
-          followingWin: years[years.length - 1],
-        });
+        const differences = [];
+        for (let i = 1; i < years.length; i++) {
+          differences.push({
+            interval: years[i] - years[i - 1],
+            previousWin: years[i - 1],
+            followingWin: years[i],
+          });
+        }
+
+        const maxDifference = Math.max(...differences.map(diff => diff.interval));
+
+        if (maxDifference > 1) {
+          differences.forEach(diff => {
+            if (diff.interval === maxDifference) {
+              maxIntervals.push({
+                producer,
+                interval: diff.interval,
+                previousWin: diff.previousWin,
+                followingWin: diff.followingWin,
+              });
+            }  
+          });
+        }
+
+        for (let i = 1; i < years.length; i++) {
+          const consecutiveInterval = years[i] - years[i - 1];
+          if (consecutiveInterval === 1) {
+            minIntervals.push({
+              producer,
+              interval: consecutiveInterval,
+              previousWin: years[i - 1],
+              followingWin: years[i],
+            });
+          }
+        }
       }
     }
 
-    const minInterval = Math.min(...intervals.map(entry => entry.interval));
-    const maxInterval = Math.max(...intervals.map(entry => entry.interval));
-
-    const minProducers = intervals.filter(entry => entry.interval === minInterval);
-    const maxProducers = intervals.filter(entry => entry.interval === maxInterval);
-
     return {
-      min: minProducers,
-      max: maxProducers,
+      min: minIntervals,
+      max: maxIntervals,
     };
   }
 }
